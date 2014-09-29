@@ -31,7 +31,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 										$scope.imgs = [];
 										$scope.bigImage = [];
 										console.log(data);
-										$scope.frendName = {name:'test'};
+										$scope.frendName = 'test';
 									//	for(var i = 0, lngth = data.response.length; i<lngth; i++){
 											$scope.albums = data.response;
 									//	}
@@ -40,17 +40,49 @@ app.config(function($stateProvider, $urlRouterProvider){
 										deferred.reject(err);
 										console.log('err ',err);
 									});
-
-
 							}
-
-                            
-							
                         }
                     ]
                 }
             }
         })
+        .state('album.show', {
+            url: '/:albId',
+
+            views: {
+                '': {
+                    templateUrl: "/static/partials/albumShow.html",
+                    controller: ['$scope', '$http', '$q', '$stateParams',
+                        function($scope, $http, $q, $stateParams) {
+
+				            $scope.showImage = '';
+                            console.log($stateParams);
+                        	var path = 'https://api.vk.com/method/photos.get?owner_id='+ $scope.user +'&album_id='+ $stateParams.albId + '&callback=JSON_CALLBACK';
+                            console.log(path);
+                            var deferred = $q.defer();
+                                $http.jsonp(path).success(function (data) {
+                                    deferred.resolve(data.response);
+                                    console.log(data);
+                                    $scope.imgs = [];
+                                    $scope.bigImage = [];
+                                    for(var i = 0, lngth = data.response.length; i<lngth; i++){
+                                        $scope.imgs.push(data.response[i].src_small);
+                                        $scope.bigImage.push(data.response[i].src_xbig);
+                                    }
+
+                                }).error(function (err) {
+                                    deferred.reject(err);
+                                    console.log('err ',err);
+                                });
+
+                        }
+                    ]
+                }
+            }
+        })
+
+
+
 
 
 });

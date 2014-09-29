@@ -1,11 +1,11 @@
 <div class="panel panel-default" ng-if='albums'>
 	<div class="panel-heading"> 
-		<h5>Альбомы пользователя {{frendName.name}}</h5>
+		<h5>Альбомы пользователя {{frendName}}</h5>
 	</div>
 	<div class="panel-body">     
 		<p>
 			<d ng-repeat="album in albums">
-				<img class="img-thumbnail" title="{{album}}" style='width:100px; height:100px;' ng-click='showAlbum($index)' src="{{album.thumb_src}}" alt="">
+				<img class="img-thumbnail" title="{{album.title}}" style='width:100px; height:100px;' ui-sref="album.show({albId:album.aid, albName:album.title})" src="{{album.thumb_src}}" alt="">
 			</d>
 		<p>
 	</div>
