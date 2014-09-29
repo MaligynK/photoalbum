@@ -5,6 +5,9 @@ app.config(function($httpProvider){
     $httpProvider.defaults.xsrfHeaderName = "X-CSRFToken";
 });
 
+
+
+
 app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider
 
@@ -14,30 +17,55 @@ app.config(function($stateProvider, $urlRouterProvider){
                     controller: ['$scope', '$http', '$q',
                         function ($scope, $http, $q) {
 
-                            var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://oauth.vk.com/blank.html&response_type=code&v=5.25';
-                            //$http.defaults.headers.common = 'Access-Control-Allow-Origin: *';
 
+                            console.log('!!!!!!!!!!');
+                            /*location.href='https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vk_login/&response_type=token&display=popup';
+                            VK.init({
+			                    apiId: 4565164
+			                });
+                            VK.Auth.getLoginStatus(authInfo);
+                            function authInfo(response) {
+                                if (response.session) {
+                                    $scope.userSession = response.session;
+                                    console.log('!!!!', $scope.userSession);
+                                } else {
+                                    alert('not auth');
+                                }
+                            }*/
+
+
+
+
+
+                          //  $scope.popup = window.open('https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/blank.html&response_type=token', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
+                         //   popup.document.write('12321')
+                         //   popup.location.assign('https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://oauth.vk.com/blank.html&response_type=token&display=popup');
+
+
+
+
+                            /*var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vklogin/&response_type=code&display=popup';
                             var deferred = $q.defer();
 
-                                $http({method: 'GET', url: path}).
-                                  success(function(data, status, headers, config) {
+                                $http({method: 'GET', url: path})
+                                  .success(function(data, status, headers, config) {
                                     // this callback will be called asynchronously
                                     deferred.resolve(data);
                                     console.log('!!!');
                                     // when the response is available
-                                  }).
-                                  error(function(data, status, headers, config) {
+                                  })
+                                  .error(function(data, status, headers, config) {
                                     // called asynchronously if an error occurs
                                     deferred.reject(data);
                                     // or server returns response with an error status.
                                   });
-                            /*	$http.jsonp(path).success(function (data) {
-                                    deferred.resolve(data.response);
+                            	$http.jsonp(path).success(function (data) {
                                     console.log('!!!');
+                                    deferred.resolve(data);
                                 }).error(function (err) {
                                     deferred.reject(err);
                                     console.log('err ',err);
-                                });	*/
+                                });*/
 
                         }
                     ]
