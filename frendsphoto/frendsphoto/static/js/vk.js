@@ -11,8 +11,8 @@ app.config(function($stateProvider, $urlRouterProvider){
             views: {
                 '': {
                     templateUrl: "/static/partials/album.html",
-                    controller: ['$scope', '$http',
-                        function( $scope,   $http) {
+                    controller: ['$scope', '$http', '$q',
+                        function( $scope,   $http, $q) {
 
 							var text = 30053727;
 							console.log('!!!');
