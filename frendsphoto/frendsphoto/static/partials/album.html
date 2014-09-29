@@ -5,7 +5,7 @@
 	<div class="panel-body">     
 		<p>
 			<d ng-repeat="album in albums">
-				<img class="img-thumbnail" title="{{album.title}}" style='width:100px; height:100px;' ui-sref="album.show({albId:album.aid, albName:album.title})" src="{{album.thumb_src}}" alt="">
+				<img class="img-thumbnail" title="{{album.title}}" style='width:100px; height:100px;' ui-sref="album.show({albId:album.aid})" src="{{album.thumb_src}}" alt="">
 			</d>
 		<p>
 	</div>

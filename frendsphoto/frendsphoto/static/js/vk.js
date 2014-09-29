@@ -7,23 +7,61 @@ app.config(function($httpProvider){
 
 app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider
+
+        .state('enter', {
+            views: {
+                '': {
+                    controller: ['$scope', '$http', '$q',
+                        function ($scope, $http, $q) {
+
+                            var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://oauth.vk.com/blank.html&response_type=code&v=5.25';
+                            //$http.defaults.headers.common = 'Access-Control-Allow-Origin: *';
+
+                            var deferred = $q.defer();
+
+                                $http({method: 'GET', url: path}).
+                                  success(function(data, status, headers, config) {
+                                    // this callback will be called asynchronously
+                                    deferred.resolve(data);
+                                    console.log('!!!');
+                                    // when the response is available
+                                  }).
+                                  error(function(data, status, headers, config) {
+                                    // called asynchronously if an error occurs
+                                    deferred.reject(data);
+                                    // or server returns response with an error status.
+                                  });
+                            /*	$http.jsonp(path).success(function (data) {
+                                    deferred.resolve(data.response);
+                                    console.log('!!!');
+                                }).error(function (err) {
+                                    deferred.reject(err);
+                                    console.log('err ',err);
+                                });	*/
+
+                        }
+                    ]
+                }
+            }
+        })
+
+
+
         .state('album', {
             views: {
                 '': {
                     templateUrl: "/static/partials/album.html",
                     controller: ['$scope', '$http', '$q',
-                        function( $scope,   $http, $q) {
+                        function($scope,   $http, $q) {
 
 							var text = 30053727;
-							console.log('!!!');
 							//$(document).ready(function() {
 							//	text = $('#linkUser')[0].value;
 							//});
 							if(/[0-9]+/.test(text)){
 								$scope.user = text;
-								var path = 'https://api.vk.com/method/photos.getAlbums?owner_id='+$scope.user + '&need_covers=1' + '&callback=JSON_CALLBACK';
-								console.log(path);
 
+								var path = 'https://api.vk.com/method/photos.getAlbums?owner_id='+$scope.user + '&need_covers=1' + '&callback=JSON_CALLBACK';
 								var deferred = $q.defer();
 									$http.jsonp(path).success(function (data) {
 										deferred.resolve(data.response);
@@ -32,10 +70,8 @@ app.config(function($stateProvider, $urlRouterProvider){
 										$scope.bigImage = [];
 										console.log(data);
 										$scope.frendName = 'test';
-									//	for(var i = 0, lngth = data.response.length; i<lngth; i++){
-											$scope.albums = data.response;
-									//	}
-									
+										$scope.albums = data.response;
+
 									}).error(function (err) {
 										deferred.reject(err);
 										console.log('err ',err);
@@ -48,15 +84,24 @@ app.config(function($stateProvider, $urlRouterProvider){
         })
         .state('album.show', {
             url: '/:albId',
-
             views: {
                 '': {
                     templateUrl: "/static/partials/albumShow.html",
                     controller: ['$scope', '$http', '$q', '$stateParams',
                         function($scope, $http, $q, $stateParams) {
+                            var index;
+                            for(var i= 0, lngth = $scope.albums.length; i < lngth; i++){
+                                if($scope.albums[i].aid == $stateParams.albId){
+                                    index = i;
+                                    break;
+                                }
+
+                            }
+
+                            $scope.albName = $scope.albums[index].title;
 
 				            $scope.showImage = '';
-                            console.log($stateParams);
+                            console.log();
                         	var path = 'https://api.vk.com/method/photos.get?owner_id='+ $scope.user +'&album_id='+ $stateParams.albId + '&callback=JSON_CALLBACK';
                             console.log(path);
                             var deferred = $q.defer();
