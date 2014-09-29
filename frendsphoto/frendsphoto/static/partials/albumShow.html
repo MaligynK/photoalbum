@@ -1,0 +1,12 @@
+<div class="panel panel-default" ng-if='imgs'>
+	<div class="panel-heading"> 
+		<h5>Изображения из альбома: {{albName}}</h5>
+	</div>
+	<div class="panel-body">
+		<d ng-repeat="img in imgs">
+			<img class="img-thumbnail" style='width:100px; height:100px;' ng-click='show($index)' src="{{img}}" alt="">
+		</d>
+		</p>
+		<img ng-if='showImage' src="{{showImage}}" style='width:600px;' class="img-rounded" alt="">
+	</div>
+</div>
