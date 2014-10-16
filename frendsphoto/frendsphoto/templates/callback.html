@@ -2,16 +2,20 @@
 <html lang="ru-RU" >
 <head>
 	<meta charset="utf-8">
-	<script type="text/javascript" src="/static/lib/jquery-2.1.1.js"></script>
-	<script type="text/javascript" src="/static/lib/angular.js"></script>
-    <script type="text/javascript" src="/static/lib/angular-ui-router.min.js"></script>
-	<script type="text/javascript" src="/static/lib/ui-bootstrap-tpls-0.11.0.min.js"></script>
-    <script src="/static/lib/angular-resource.min.js"></script>
-    <link rel="stylesheet" href="/static/lib/bootstrap.css"/>
-	
+
 </head>
 <body>
 
-11111111111111111111111111111111111111111111111111111111
+<script>
+
+function receiveMessage(event)
+{
+    event.source.postMessage(window.location.toString(),
+                           event.origin);
+}
+window.addEventListener("message", receiveMessage, false);
+
+</script>
+
 </body>
 </html>

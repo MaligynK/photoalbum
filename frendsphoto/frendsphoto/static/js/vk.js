@@ -17,88 +17,22 @@ app.config(function($stateProvider, $urlRouterProvider){
                     controller: ['$scope', '$http', '$q', '$window', '$interval',
                         function ($scope, $http, $q, $window, $interval) {
 
-
-                            console.log('!!!!!!!!!!');
-                            /*location.href='https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vk_login/&response_type=token&display=popup';
-                            VK.init({
-			                    apiId: 4565164
-			                });
-                            VK.Auth.getLoginStatus(authInfo);
-                            function authInfo(response) {
-                                if (response.session) {
-                                    $scope.userSession = response.session;
-                                    console.log('!!!!', $scope.userSession);
-                                } else {
-                                    alert('not auth');
-                                }
-                            }*/
-
-
-
-
-
-                            popup = $window.open('http://www.odnoklassniki.ru/dk?st.cmd=OAuth2Permissions&st.scope=VALUABLE_ACCESS&st.response_type=token&st.redirect_uri=http%3A%2F%2F192.168.0.130:8080%2Fcallback.html&st.layout=w&st.client_id=1105229312&st.show_permissions=off', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
-                          //  $scope.popup = $window.open('', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
-                            popup.postMessage('111111111', 'https://192.168.0.130:8080/callback.html');
-
+                            popup = $window.open('http://www.odnoklassniki.ru/dk?st.cmd=OAuth2Permissions&st.scope=VALUABLE_ACCESS;PHOTO_CONTENT&st.response_type=token&st.redirect_uri=http%3A%2F%2F192.168.0.130:8080%2Fcallback.html&st.layout=w&st.client_id=1105229312&st.show_permissions=off', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
                             var receiveMessage = function (event){
-                                console.log(123,event);
+                                console.log(event.data);
+                                $scope.path = event.data;
+                                $interval.cancel(messageTimer);
+                                popup.close();
 
 
-                              //if (event.origin !== "http://example.org")
-                               // return;
-                              // event.source is popup
-                              // event.data is "hi there yourself!  the secret response is: rheeeeet!"
+
                             }
                             $window.addEventListener("message", receiveMessage, false);
-                         //   popup.document.write('12321')
-                         //   popup.location.assign('https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://oauth.vk.com/blank.html&response_type=token&display=popup');
 
+                            var messageTimer = $interval(function(){
+                                popup.postMessage('111111111', 'http://192.168.0.130:8080/callback.html');
 
-                        /*    var imagesTimer = $interval(function(){
-                             //   var path = popup.location.toString();
-                                console.log('timer',popup);
-                                if(!popup.name //|| popup.location.toString().indexOf('error') > -1 || popup.location.toString().indexOf('code') > -1
-                                                         ){
-                                    $interval.cancel(imagesTimer);
-                                }
-                            }, 100)
-
-                        /*    $scope.$watch(function () {
-                                console.log('00');
-                                return popup.location;
-                            },
-                            function(newVal, oldVal) {
-                                console.log('watch',newVal.toString());
-                                if(newVal == true)
-                                    console.log(1, newVal.toString());
-                               // else $scope.$apply();
-                                //$scope.isCollapsed = newVal;
-                            }, true);*/
-
-                             //   var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vklogin/&response_type=code&display=code' /*+ '&callback=JSON_CALLBACK'*/;
-                              //  var deferred = $q.defer();
-
-                               /* $http({method: 'GET', url: path, withCredentials: true})
-                                    .success(function (data, status, headers, config) {
-                                        // this callback will be called asynchronously
-                                        deferred.resolve(data);
-                                        console.log('&&&');
-                                        // when the response is available
-                                    })
-                                    .error(function (data, status, headers, config) {
-                                        // called asynchronously if an error occurs
-                                        deferred.reject(data);
-                                        // or server returns response with an error status.
-                                    });*/
-                             /*   $http.jsonp(path).success(function (data) {
-                                    console.log('&&&', data);
-                                    deferred.resolve(data);
-                                }).error(function (err) {
-                                    deferred.reject(err);
-                                    console.log('err ', err);
-                                });*/
-
+                            }, 200)
 
                         }
                     ]
