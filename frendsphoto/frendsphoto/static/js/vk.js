@@ -14,8 +14,8 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('enter', {
             views: {
                 '': {
-                    controller: ['$scope', '$http', '$q',
-                        function ($scope, $http, $q) {
+                    controller: ['$scope', '$http', '$q', '$window', '$interval',
+                        function ($scope, $http, $q, $window, $interval) {
 
 
                             console.log('!!!!!!!!!!');
@@ -37,43 +37,68 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 
 
-                            popup = window.open('https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/blank.html&response_type=token', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
+                            popup = $window.open('http://www.odnoklassniki.ru/dk?st.cmd=OAuth2Permissions&st.scope=VALUABLE_ACCESS&st.response_type=token&st.redirect_uri=http%3A%2F%2F192.168.0.130:8080%2Fcallback.html&st.layout=w&st.client_id=1105229312&st.show_permissions=off', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
+                          //  $scope.popup = $window.open('', 'Авторизация', "height=300, width=700, top=300, left=300, scrollbars=1")
+                            popup.postMessage('111111111', 'https://192.168.0.130:8080/callback.html');
+
+                            var receiveMessage = function (event){
+                                console.log(123,event);
+
+
+                              //if (event.origin !== "http://example.org")
+                               // return;
+                              // event.source is popup
+                              // event.data is "hi there yourself!  the secret response is: rheeeeet!"
+                            }
+                            $window.addEventListener("message", receiveMessage, false);
                          //   popup.document.write('12321')
                          //   popup.location.assign('https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://oauth.vk.com/blank.html&response_type=token&display=popup');
 
-                            $scope.$watch(function () {
+
+                        /*    var imagesTimer = $interval(function(){
+                             //   var path = popup.location.toString();
+                                console.log('timer',popup);
+                                if(!popup.name //|| popup.location.toString().indexOf('error') > -1 || popup.location.toString().indexOf('code') > -1
+                                                         ){
+                                    $interval.cancel(imagesTimer);
+                                }
+                            }, 100)
+
+                        /*    $scope.$watch(function () {
                                 console.log('00');
                                 return popup.location;
                             },
                             function(newVal, oldVal) {
-                                if(newVal === true)
-                                    console.log('1 ',popup.location.toString());
+                                console.log('watch',newVal.toString());
+                                if(newVal == true)
+                                    console.log(1, newVal.toString());
+                               // else $scope.$apply();
                                 //$scope.isCollapsed = newVal;
-                            }, true);
+                            }, true);*/
 
+                             //   var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vklogin/&response_type=code&display=code' /*+ '&callback=JSON_CALLBACK'*/;
+                              //  var deferred = $q.defer();
 
-                          /*  var path = 'https://oauth.vk.com/authorize?client_id=4565164&scope=friends&redirect_uri=https://192.168.0.130:8080/vklogin/&response_type=code&display=popup';
-                            var deferred = $q.defer();
-
-                                $http({method: 'GET', url: path, withCredentials: true})
-                                  .success(function(data, status, headers, config) {
-                                    // this callback will be called asynchronously
-                                    deferred.resolve(data);
-                                    console.log('!!!');
-                                    // when the response is available
-                                  })
-                                  .error(function(data, status, headers, config) {
-                                    // called asynchronously if an error occurs
-                                    deferred.reject(data);
-                                    // or server returns response with an error status.
-                                  });
-                           /* 	$http.jsonp(path).success(function (data) {
-                                    console.log('!!!');
+                               /* $http({method: 'GET', url: path, withCredentials: true})
+                                    .success(function (data, status, headers, config) {
+                                        // this callback will be called asynchronously
+                                        deferred.resolve(data);
+                                        console.log('&&&');
+                                        // when the response is available
+                                    })
+                                    .error(function (data, status, headers, config) {
+                                        // called asynchronously if an error occurs
+                                        deferred.reject(data);
+                                        // or server returns response with an error status.
+                                    });*/
+                             /*   $http.jsonp(path).success(function (data) {
+                                    console.log('&&&', data);
                                     deferred.resolve(data);
                                 }).error(function (err) {
                                     deferred.reject(err);
-                                    console.log('err ',err);
+                                    console.log('err ', err);
                                 });*/
+
 
                         }
                     ]
