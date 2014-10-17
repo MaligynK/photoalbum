@@ -22,11 +22,22 @@ app.config(function($stateProvider, $urlRouterProvider){
 
                             var getAlbums = function () {
 
+                                var sig = hex_md5('application_key=' + $scope.sessionSettings[0] +
+                                                        'method=users.getCurrentUser' +
+                                                        $scope.sessionSettings[3]);
+
+                                var url = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
+                                                '&method=users.getCurrentUser' +
+                                                '&access_token=' + $scope.sessionSettings[1] +
+                                                '&sig=' + sig;
+
 
 
 
 
                             }
+
+
 
 
                             var receiveMessage = function (event){
