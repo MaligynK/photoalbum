@@ -22,17 +22,6 @@ app.config(function($stateProvider, $urlRouterProvider){
 
                             var getAlbums = function () {
 
-                                var sig = hex_md5('application_key=' + $scope.sessionSettings[0] +
-                                                        'method=users.getCurrentUser' +
-                                                        $scope.sessionSettings[3]);
-
-                                var url = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
-                                                '&method=users.getCurrentUser' +
-                                                '&access_token=' + $scope.sessionSettings[1] +
-                                                '&sig=' + sig;
-
-
-
 
 
                             }
@@ -49,17 +38,17 @@ app.config(function($stateProvider, $urlRouterProvider){
                                     $scope.sessionSettings[0] = 'CBAHHBOCEBABABABA';
 
                                  //   var sig = hex_md5('application_key=' + $scope.sessionSettings[0] + 'method=photos.getAlbums' + $scope.sessionSettings[3]);
-                                  /*  var sig = hex_md5('application_key=' + $scope.sessionSettings[0] +
+                                    var sig = hex_md5('application_key=' + $scope.sessionSettings[0] +
                                                         'method=users.getCurrentUser' +
-                                                        $scope.sessionSettings[3]);*/
-                                    getAlbums();
+                                                        $scope.sessionSettings[3]);
+
                                 //    var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] + '&method=photos.getAlbums&access_token=' + $scope.sessionSettings[1] + '&sig=' + sig;
-                                 /*   var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
+                                    var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
                                                 '&method=users.getCurrentUser' +
                                                 '&access_token=' + $scope.sessionSettings[1] +
-                                                '&sig=' + sig;*/
+                                                '&sig=' + sig + '&js_callback=__fapi__callback_1';
 
-                        /*                var deferred = $q.defer();
+                                        var deferred = $q.defer();
                                         $http.jsonp(path).success(function (data) {
                                             if (data.response) {
                                                 console.log(data.response);
@@ -72,7 +61,25 @@ app.config(function($stateProvider, $urlRouterProvider){
                                         }).error(function (data, status, headers, config) {
                                             console.log('err ', data);
                                             deferred.reject(data);
-                                        });*/
+                                        });
+                                    //getAlbums();
+
+                                /*    FAPI.Client.initialize();
+
+                                     // Sample function to getUserInfo
+                                    FAPI.Client.apiServer = 'api.odnoklassniki.ru';
+                                    FAPI.Client.baseUrl = 'fb.do';
+                                    FAPI.Client.applicationKey = $scope.sessionSettings[0];
+                                    console.log('!!!!!!!!!', FAPI);
+                                     methodParams = {"method":"users.getCurrentUser", 'access_token': $scope.sessionSettings[1]};
+
+                                      FAPI.Client.call( methodParams, function(status, data, error){
+                                          if (status=="ok"){
+                                              console.log("Current user info : ",data[0]);
+                                          } else{
+                                              console.log("ERROR : " +error.error_msg+"("+error.error_code+")");
+                                          }
+                                      });*/
 
 
 
