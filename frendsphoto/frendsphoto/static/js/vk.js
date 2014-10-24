@@ -17,7 +17,7 @@ app.config(function($stateProvider, $urlRouterProvider){
                     controller: ['$scope', '$http', '$q', '$window', '$interval',
                         function ($scope, $http, $q, $window, $interval) {
 
-                            popup = $window.open('http://www.odnoklassniki.ru/oauth/authorize?client_id=1105229312&scope=VALUABLE_ACCESS;PHOTO_CONTENT&response_type=token&redirect_uri=http://192.168.0.130:8080/callback.html&layout=w', 'Авторизация', "height=380, width=700, top=300, left=300, scrollbars=1")
+                            popup = $window.open('http://www.odnoklassniki.ru/oauth/authorize?client_id=1105229312&scope=VALUABLE_ACCESS;PHOTO_CONTENT&response_type=token&redirect_uri=http://192.168.0.119:8080/callback.html&layout=w', 'Авторизация', "height=380, width=700, top=300, left=300, scrollbars=1")
 
 
                             var getAlbums = function () {
@@ -35,6 +35,7 @@ app.config(function($stateProvider, $urlRouterProvider){
                                 if(event.data.indexOf('access_token')){
 
                                     $scope.sessionSettings = event.data.split(/=|&/);
+                                    console.log($scope.sessionSettings);
                                     $scope.sessionSettings[0] = 'CBAHHBOCEBABABABA';
 
                                  //   var sig = hex_md5('application_key=' + $scope.sessionSettings[0] + 'method=photos.getAlbums' + $scope.sessionSettings[3]);
@@ -48,7 +49,7 @@ app.config(function($stateProvider, $urlRouterProvider){
                                                 '&access_token=' + $scope.sessionSettings[1] +
                                                 '&sig=' + sig + '&js_callback=__fapi__callback_1';
 
-                                        var deferred = $q.defer();
+                                /*        var deferred = $q.defer();
                                         $http.jsonp(path).success(function (data) {
                                             if (data.response) {
                                                 console.log(data.response);
@@ -61,8 +62,31 @@ app.config(function($stateProvider, $urlRouterProvider){
                                         }).error(function (data, status, headers, config) {
                                             console.log('err ', data);
                                             deferred.reject(data);
-                                        });
-                                    //getAlbums();
+                                        });*/
+                                    var a = '?api_server=http://api.odnoklassniki.ru&apiconnection=CBAHHBOCEBABABABA&web_server=http://192.168.0.119:8080/';
+
+                                    var rParams = FAPI.Util.getRequestParameters();
+                                    console.log(rParams);
+                                    window.location.search = '?api_server=http://api.odnoklassniki.ru' +
+                                                                '&apiconnection=' + '1105229312' +
+                                                                '&web_server=http://192.168.0.119:8080/' +
+                                                                '&application_key=' + $scope.sessionSettings[0] +
+                                                                '&session_key=' + $scope.sessionSettings[1] +
+                                                                '&session_secret_key=' + $scope.sessionSettings[3];
+                                    FAPI.init(rParams["api_server"], rParams["apiconnection"],
+                                          function() {
+                                              alert("Инициализация прошла успешно");
+                                              // здесь можно вызывать методы API
+                                          },
+                                          function(error) {
+                                              alert("неа");
+                                              console.log(error);
+                                          }
+                                    );
+
+
+
+
 
                                 /*    FAPI.Client.initialize();
 
@@ -89,7 +113,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 
                              var messageTimer = $interval(function(){
-                                popup.postMessage({}, 'http://192.168.0.130:8080/');
+                                popup.postMessage({}, 'http://192.168.0.119:8080/');
                             }, 100)
 
                         }
