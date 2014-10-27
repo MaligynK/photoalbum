@@ -1,4 +1,4 @@
-app = angular.module('demo', ['ui.bootstrap', 'ngResource', 'ui.router']);
+app = angular.module('demo', ['ui.bootstrap', 'ngRoute', 'ngResource', 'ui.router']);
 
 app.config(function($httpProvider){
     $httpProvider.defaults.xsrfCookieName = "csrftoken";
@@ -7,25 +7,31 @@ app.config(function($httpProvider){
 
 
 
+app.config(function($stateProvider, $routeProvider){
 
-app.config(function($stateProvider, $urlRouterProvider){
-	$stateProvider
+/*    $routeProvider
+        .when('/index.html/photo:data?',
+        {
+
+                    controller: ['$scope', '$http', '$q', '$window', '$interval', '$location',
+                        function ($scope, $http, $q, $window, $interval, $location) {
+                            console.log('!@!!!');
+                        }
+                    ]
+
+          //  templateUrl: '/static/app/partials/homeProfile.html'
+        })*/
+
+    $stateProvider
 
         .state('enter', {
             views: {
                 '': {
-                    controller: ['$scope', '$http', '$q', '$window', '$interval',
-                        function ($scope, $http, $q, $window, $interval) {
+                    templateUrl: "/static/partials/info.html",
+                    controller: ['$scope', '$http', '$q', '$window', '$interval', '$rootScope',
+                        function ($scope, $http, $q, $window, $interval, $rootScope) {
 
                             popup = $window.open('http://www.odnoklassniki.ru/oauth/authorize?client_id=1105229312&scope=VALUABLE_ACCESS;PHOTO_CONTENT&response_type=token&redirect_uri=http://192.168.0.119:8080/callback.html&layout=w', 'Авторизация', "height=380, width=700, top=300, left=300, scrollbars=1")
-
-
-                            var getAlbums = function () {
-
-
-
-                            }
-
 
 
 
@@ -35,21 +41,37 @@ app.config(function($stateProvider, $urlRouterProvider){
                                 if(event.data.indexOf('access_token')){
 
                                     $scope.sessionSettings = event.data.split(/=|&/);
-                                    console.log($scope.sessionSettings);
-                                    $scope.sessionSettings[0] = 'CBAHHBOCEBABABABA';
 
+                                    $scope.sessionSettings[0] = 'CBAHHBOCEBABABABA';
                                  //   var sig = hex_md5('application_key=' + $scope.sessionSettings[0] + 'method=photos.getAlbums' + $scope.sessionSettings[3]);
                                     var sig = hex_md5('application_key=' + $scope.sessionSettings[0] +
                                                         'method=users.getCurrentUser' +
                                                         $scope.sessionSettings[3]);
 
+
+
+                                    $http.get('/info/' + $scope.sessionSettings[0] + '/'
+                                                    + $scope.sessionSettings[1] + '/'
+                                                    + $scope.sessionSettings[3] + '/'
+                                                    + sig + '/')
+                                        .success(function(data) {
+
+                                            $scope.user = data;
+                                            console.log('yes',$scope.user);
+                                    })  .error(function(data, status, headers, config) {
+                                            console.log('err',data);
+                                    })
+
+
+
+
                                 //    var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] + '&method=photos.getAlbums&access_token=' + $scope.sessionSettings[1] + '&sig=' + sig;
-                                    var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
+                                 /*   var path = 'http://api.odnoklassniki.ru/fb.do?application_key=' + $scope.sessionSettings[0] +
                                                 '&method=users.getCurrentUser' +
                                                 '&access_token=' + $scope.sessionSettings[1] +
-                                                '&sig=' + sig + '&js_callback=__fapi__callback_1';
+                                                '&sig=' + sig ;
 
-                                /*        var deferred = $q.defer();
+                                        var deferred = $q.defer();
                                         $http.jsonp(path).success(function (data) {
                                             if (data.response) {
                                                 console.log(data.response);
@@ -62,18 +84,39 @@ app.config(function($stateProvider, $urlRouterProvider){
                                         }).error(function (data, status, headers, config) {
                                             console.log('err ', data);
                                             deferred.reject(data);
-                                        });*/
-                                    var a = '?api_server=http://api.odnoklassniki.ru&apiconnection=CBAHHBOCEBABABABA&web_server=http://192.168.0.119:8080/';
+                                        });
+                            /*        var a = '?api_server=http://api.odnoklassniki.ru&apiconnection=CBAHHBOCEBABABABA&web_server=http://192.168.0.119:8080/';
 
-                                    var rParams = FAPI.Util.getRequestParameters();
-                                    console.log(rParams);
-                                    window.location.search = '?api_server=http://api.odnoklassniki.ru' +
+
+                                    window.location.href = 'http://192.168.0.119:8080/index.html/photo' +
+                                                                '?api_server=http://api.odnoklassniki.ru' +
                                                                 '&apiconnection=' + '1105229312' +
                                                                 '&web_server=http://192.168.0.119:8080/' +
                                                                 '&application_key=' + $scope.sessionSettings[0] +
                                                                 '&session_key=' + $scope.sessionSettings[1] +
                                                                 '&session_secret_key=' + $scope.sessionSettings[3];
-                                    FAPI.init(rParams["api_server"], rParams["apiconnection"],
+                                    console.log('111', window.location);
+
+
+                               /*     var url = 'http://192.168.0.119:8080/index.html' +
+                                                                '?api_server=http://api.odnoklassniki.ru/' +
+                                                                '&apiconnection=' + $scope.sessionSettings[0] +
+                                                                '&web_server=http://192.168.0.119:8080/' +
+                                                                '&application_key=' +  '1105229312' +
+                                                                '&session_key=' + $scope.sessionSettings[1] +
+                                                                '&session_secret_key=' + $scope.sessionSettings[3];
+
+                                  //  window.history.pushState(null, null, url);
+
+                                //    $location.url(url);
+                                 //   $location.path('/test');
+                                  //  $location.search('apiconnection', $scope.sessionSettings[0]);
+                                   // $location.search('web_server', 'http://192.168.0.119:8080/');
+                                   // $location.replace();
+                              /*      var rParams = FAPI.Util.getRequestParameters();
+                                    console.log($urlRouterProvider);
+                                    console.log(window.location);
+                                 /*   FAPI.init(rParams["api_server"], rParams["apiconnection"],
                                           function() {
                                               alert("Инициализация прошла успешно");
                                               // здесь можно вызывать методы API
@@ -83,10 +126,6 @@ app.config(function($stateProvider, $urlRouterProvider){
                                               console.log(error);
                                           }
                                     );
-
-
-
-
 
                                 /*    FAPI.Client.initialize();
 
@@ -209,128 +248,3 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 });
 
-/*angular.module('demo', []).controller('MainCtrl', function($scope, $http, $q){
-'use strict';
-
-	VK.init({
-	  apiId: 4565164
-	});
-	function authInfo(response) {
-		console.log('!!!!!');
-	  if (response.session) {
-		alert('user: '+response.session.mid);
-		$scope.userSession = response.session;
-		getFrend();
-	  } else {
-		alert('not auth');
-	  }
-	}
-	
-	$scope.VKenter = function (){
-			console.log('!2222!');
-		VK.Auth.getLoginStatus(authInfo);
-	};
-	VK.UI.button('login_button');		
-
-
-	function getFrend () {
-		var path = 'https://api.vk.com/method/friends.get?user_id=' + $scope.userSession.mid + '&fields=photo_100&count=30' + '&callback=JSON_CALLBACK';
-		var deferred = $q.defer();
-			$http.jsonp(path).success(function (data) {
-				deferred.resolve(data.response);
-				$scope.frends = [];
-				for(var i = 0, lngth = data.response.length; i<lngth; i++){
-					$scope.frends.push([data.response[i].uid, data.response[i].photo_100, data.response[i].first_name+' '+data.response[i].last_name]);
-				}
-			}).error(function (err) {
-				deferred.reject(err);
-				console.log('err ',err);
-			});
-	};
-	
-	$scope.showUserAlbom = function (ind){
-		var path = 'https://api.vk.com/method/photos.getAlbums?owner_id='+$scope.frends[ind][0] + '&need_covers=1' + '&callback=JSON_CALLBACK';
-		$scope.frendName = $scope.frends[ind][2];
-		$scope.user = $scope.frends[ind][0];
-			var deferred = $q.defer();
-				$http.jsonp(path).success(function (data) {
-					deferred.resolve(data.response);
-					$scope.albums = [];
-					$scope.imgs = [];
-					$scope.bigImage = [];
-					for(var i = 0, lngth = data.response.length; i<lngth; i++){
-						$scope.albums.push([data.response[i].aid, data.response[i].title, data.response[i].thumb_src]);
-					}
-				
-				}).error(function (err) {
-					deferred.reject(err);
-					console.log('err ',err);
-				});
-	
-	};
-	
-	
-	$scope.showAlbum = function (ind){
-		getImg($scope.user, $scope.albums[ind][0]);
-		$scope.showImage = '';
-		$scope.albomName = $scope.albums[ind][1];
-	};
-	
-	$scope.album = function (){
-		var text = 30053727;
-		console.log('!!!');
-		$(document).ready(function() {
-			text = $('#linkUser')[0].value;
-		});
-		if(/[0-9]+/.test(text)){
-			$scope.user = text;
-			var path = 'https://api.vk.com/method/photos.getAlbums?owner_id='+$scope.user + '&need_covers=1' + '&callback=JSON_CALLBACK';
-			console.log(path);
-
-			var deferred = $q.defer();
-				$http.jsonp(path).success(function (data) {
-					deferred.resolve(data.response);
-					$scope.albums = [];
-					$scope.imgs = [];
-					$scope.bigImage = [];
-					console.log(data);
-					$scope.frendName = {name:'test'};
-				//	for(var i = 0, lngth = data.response.length; i<lngth; i++){
-						$scope.albums = data.response;
-				//	}
-				
-				}).error(function (err) {
-					deferred.reject(err);
-					console.log('err ',err);
-				});
-
-
-		}
-	};			
-
-
-	$scope.show = function (ind){
-		$scope.showImage = $scope.bigImage[ind];
-	};
-	
-	function getImg(idUser, idAlbum){
-		var path = 'https://api.vk.com/method/photos.get?owner_id='+idUser+'&album_id='+idAlbum + '&callback=JSON_CALLBACK';
-
-		var deferred = $q.defer();
-			$http.jsonp(path).success(function (data) {
-				deferred.resolve(data.response);
-				$scope.imgs = [];
-				$scope.bigImage = [];
-				for(var i = 0, lngth = data.response.length; i<lngth; i++){
-					$scope.imgs.push(data.response[i].src_small);
-					$scope.bigImage.push(data.response[i].src_xbig);
-				}
-			
-			}).error(function (err) {
-				deferred.reject(err);
-				console.log('err ',err);
-			});
-	
-	};
-	
-});*/

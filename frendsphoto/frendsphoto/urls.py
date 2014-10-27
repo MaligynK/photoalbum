@@ -8,6 +8,10 @@ urlpatterns = patterns('',
 
     # url(r'^admin/', include(admin.site.urls)),
 	 (r'^index.html', 'frendsphoto.views.home'),
+	# (r'^photo.html', 'frendsphoto.views.photo'),
 	 (r'^callback.html$', 'frendsphoto.views.callback'),
+     url(r'^info/(.+)/(.+)/(.+)/(.+)/$', 'frendsphoto.views.info'),
 	# (r'^$', 'frendsphoto.views.home'),
 )
+
+
